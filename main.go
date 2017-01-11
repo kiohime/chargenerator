@@ -8,18 +8,9 @@ import (
 	"os"
 	"strings"
 	"time"
-)
 
-// JUST ECHO, FOR SOME REASON
-// func echo(names []string) {
-// 	s, sep := "", ""
-// 	for _, arg := range names[0:] {
-// 		s += sep + arg
-// 		sep = "\n"
-// 	}
-// 	fmt.Println(s)
-// 	return
-// }
+	ansi "github.com/k0kubun/go-ansi"
+)
 
 // readLines reads a whole file into memory
 // // and returns a slice of its lines.
@@ -38,23 +29,46 @@ import (
 // 	return lines, scanner.Err()
 // }
 
-func main() {
-	readName, _ := ioutil.ReadFile("charNames.txt")
-	// if err != nil {
-	// 	return
-	// }
-	strName := string(readName)             //creates string from fileinput
-	names := strings.Split(strName, "\r\n") //creates slice from ctreated string, using beginning of stroke and newline as separator
+type Character struct {
+	charName, charNickname, charSurname, charGender string
+}
 
-	for i := 1; i < 50; i++ {
-		time.Sleep(10 * time.Millisecond) //give rand.Seed some time to reset value
-		rand.Seed(time.Now().UnixNano())
-		randName := names[rand.Intn(len(names))] //randomzer from slice
+func getRand(a string) string {
 
-		fmt.Printf("Random name is: %v\n", randName)
+	time.Sleep(10 * time.Millisecond) //give rand.Seed some time to reset value
+	rand.Seed(time.Now().UnixNano())
+
+	file, _ := ioutil.ReadFile("")
+	switch a {
+	case "name":
+		file, _ = ioutil.ReadFile("charNames.txt")
+	case "surname":
+		file, _ = ioutil.ReadFile("charSurNames.txt")
+	case "nickname":
+		file, _ = ioutil.ReadFile("charNickNames.txt")
+	case "gender":
+		gender := [2]string{"male", "female"}
+		gRand := gender[rand.Intn(len(gender))]
+		return gRand
+
 	}
 
-	fmt.Printf("\nPress 'Enter' to continue...")
-	bufio.NewReader(os.Stdin).ReadBytes('\n') // for building program interface
+	strFile := string(file) //creates string from fileinput
+	sliceFile := strings.Split(strFile, "\r\n")
+	gRand := sliceFile[rand.Intn(len(sliceFile))] //randomzer from slice
+	return gRand
+}
 
+func main() {
+	anon := new(Character)
+	for i := 1; i < 50; i++ {
+		anon.charName = getRand("name")
+		anon.charSurname = getRand("surname")
+		anon.charNickname = getRand("nickname")
+		anon.charGender = getRand("gender")
+		ansi.Printf("\n%v \x1b[36m~%v~\x1b[0m %v, \x1b[33m%v\x1b[0m", anon.charName, anon.charNickname, anon.charSurname, anon.charGender)
+	}
+
+	fmt.Printf("\n\nPress 'Enter' to continue...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n') // for building program interface
 }
