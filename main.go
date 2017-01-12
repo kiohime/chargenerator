@@ -35,9 +35,6 @@ type Character struct {
 
 func getRand(a string) string {
 
-	time.Sleep(10 * time.Millisecond) //give rand.Seed some time to reset value
-	rand.Seed(time.Now().UnixNano())
-
 	file, _ := ioutil.ReadFile("")
 	switch a {
 	case "name":
@@ -60,13 +57,17 @@ func getRand(a string) string {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	anon := new(Character)
 	for i := 1; i < 50; i++ {
+		// assert(i > 1, "yhmjfdyhjdjhdfyhj")
 		anon.charName = getRand("name")
 		anon.charSurname = getRand("surname")
 		anon.charNickname = getRand("nickname")
 		anon.charGender = getRand("gender")
 		ansi.Printf("\n%v \x1b[36m~%v~\x1b[0m %v, \x1b[33m%v\x1b[0m", anon.charName, anon.charNickname, anon.charSurname, anon.charGender)
+
 	}
 
 	fmt.Printf("\n\nPress 'Enter' to continue...")
