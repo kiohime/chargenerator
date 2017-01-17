@@ -1,0 +1,1 @@
+go run main.go error.go charNameData.go japanese.go

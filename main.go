@@ -3,73 +3,89 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
-
-	ansi "github.com/k0kubun/go-ansi"
 )
 
-// readLines reads a whole file into memory
-// // and returns a slice of its lines.
-// func readLines(path string) ([]string, error) {
-// 	file, err := os.Open(path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer file.Close()
-
-// 	var lines []string
-// 	scanner := bufio.NewScanner(file)
-// 	for scanner.Scan() {
-// 		lines = append(lines, scanner.Text())
-// 	}
-// 	return lines, scanner.Err()
-// }
-
+//Character blablabla
 type Character struct {
-	charName, charNickname, charSurname, charGender string
+	charNation, charMeta, charGender, charName, charNickname, charSurname string
+	charID                                                                int
 }
 
-func getRand(a string) string {
+var inputGender int
+var genderIndex int
+var nationIndex int
 
-	file, _ := ioutil.ReadFile("")
+func getRand(a string) string {
+	var file []string
+	var gRand string
 	switch a {
-	case "name":
-		file, _ = ioutil.ReadFile("charNames.txt")
-	case "surname":
-		file, _ = ioutil.ReadFile("charSurNames.txt")
-	case "nickname":
-		file, _ = ioutil.ReadFile("charNickNames.txt")
-	case "gender":
-		gender := [2]string{"male", "female"}
-		gRand := gender[rand.Intn(len(gender))]
+	case "nation":
+		nationIndex = rand.Intn(5)
+		// nationIndex = 1
 		return gRand
 
+	case "gender":
+		genderIndex = inputGender
+		switch genderIndex {
+		case 0:
+			gRand = "male"
+		case 1:
+			gRand = "female"
+		case 2:
+			gRand = "unisex"
+		}
+		return gRand
+	case "name":
+		file = names(nationIndex)
+	case "surname":
+		file = surnames(nationIndex)
+	case "nickname":
+		file = nicknames()
+	case "metatype":
+		file = metatypes()
 	}
 
-	strFile := string(file) //creates string from fileinput
-	sliceFile := strings.Split(strFile, "\r\n")
-	gRand := sliceFile[rand.Intn(len(sliceFile))] //randomzer from slice
+	// strFile := string(file) //creates string from fileinput
+	// sliceFile := strings.Split(strFile, "\r\n")
+	gRand = file[rand.Intn(len(file))] //randomzer from slice
 	return gRand
+}
+
+func createChar(i int) *Character {
+
+	anon := new(Character)
+	// 	// assert(i > 1, "yhmjfdyhjdjhdfyhj")
+	anon.charID = i
+	anon.charNation = getRand("nation")
+	anon.charGender = getRand("gender")
+	anon.charName = getRand("name")
+	anon.charSurname = getRand("surname")
+	anon.charNickname = getRand("nickname")
+	anon.charMeta = getRand("metatype")
+
+	fmt.Println(anon.charID, anon.charName, anon.charNickname, anon.charSurname, anon.charMeta, anon.charGender)
+	// fmt.Printf("genderindex = %v\n\n", genderIndex)
+
+	return anon
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+	charArray := []*Character{}
 
-	anon := new(Character)
 	for i := 1; i < 50; i++ {
-		// assert(i > 1, "yhmjfdyhjdjhdfyhj")
-		anon.charName = getRand("name")
-		anon.charSurname = getRand("surname")
-		anon.charNickname = getRand("nickname")
-		anon.charGender = getRand("gender")
-		ansi.Printf("\n%v \x1b[36m~%v~\x1b[0m %v, \x1b[33m%v\x1b[0m", anon.charName, anon.charNickname, anon.charSurname, anon.charGender)
-
+		inputGender = 2
+		// inputGender = rand.Intn(3)
+		x := createChar(i)
+		charArray = append(charArray, x)
+		// fmt.Println(anon.charID, anon.charName, anon.charNickname, anon.charSurname, anon.charMeta, anon.charGender)
 	}
 
-	fmt.Printf("\n\nPress 'Enter' to continue...")
+	// fmt.Println(charArray[7])
+
+	fmt.Printf("\nPress 'Enter' to continue...")
 	bufio.NewReader(os.Stdin).ReadBytes('\n') // for building program interface
 }
