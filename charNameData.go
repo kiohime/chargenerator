@@ -1,5 +1,13 @@
 package main
 
+func genders() []string {
+	gender := []string{
+		"male",
+		"female",
+	}
+	return gender
+}
+
 func metatypes() []string {
 	metatype := []string{
 		"human",
