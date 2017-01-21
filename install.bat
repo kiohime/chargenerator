@@ -1,0 +1,1 @@
+go build main.go charNameData.go error.go func.go japanese.go nicknames.go

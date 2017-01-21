@@ -1,1 +1,1 @@
-go run main.go error.go charNameData.go japanese.go
+go run main.go error.go func.go charNameData.go nicknames.go natJapanese.go natAmerican.go natChinese.go natIndian.go natRussian.go
