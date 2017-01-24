@@ -1,1 +1,1 @@
-go build main.go charNameData.go error.go func.go japanese.go nicknames.go
+go build main.go error.go func.go charNameData.go nicknames.go natJapanese.go natAmerican.go natChinese.go natIndian.go natRussian.go
